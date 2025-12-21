@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/Lexnova/static/css/main.35cc408a.css",
+    "main.js": "/Lexnova/static/js/main.f6cf57b5.js",
+    "index.html": "/Lexnova/index.html",
+    "main.35cc408a.css.map": "/Lexnova/static/css/main.35cc408a.css.map",
+    "main.f6cf57b5.js.map": "/Lexnova/static/js/main.f6cf57b5.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.35cc408a.css",
+    "static/js/main.f6cf57b5.js"
+  ]
+}
