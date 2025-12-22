@@ -34,23 +34,37 @@
 }
 
 .nav-link {
+  padding: 0 6px;
   background: none;
   border: none;
-  font-family: inherit;
-  font-size: 12px;
   cursor: pointer;
   color: #000;
 }
 
 .nav-primary {
+  padding: 0 18px;
   background-color: #0a0a0a;
   color: #ffffff;
   border: none;
-  padding: 10px 18px;
-  font-size: 11px;
   border-radius: 8px;
   cursor: pointer;
 }
+
+.nav-link,
+.nav-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 36px;
+  line-height: 1;
+
+  font-size: 11px;
+  font-family: inherit;
+
+  white-space: nowrap;
+}
+
 
 /* =========================
    HERO SECTION
@@ -495,4 +509,9 @@
     flex-direction: column;
     gap: 32px;
   }
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
 }

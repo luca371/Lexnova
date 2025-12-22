@@ -8,8 +8,8 @@ function LandingScreen() {
         <div className="logo">LEXNOVA°</div>
 
         <nav className="nav-actions">
-          <button className="nav-link">Sign in</button>
-          <button className="nav-primary">Get started</button>
+          <Link to="/login" className="nav-link">Sign in</Link>
+          <Link to="/register" className="nav-primary">Get started</Link>
         </nav>
       </header>
 
@@ -30,8 +30,8 @@ function LandingScreen() {
         </p>
 
         <div className="hero-actions">
-          <button className="btn-primary">Începe gratuit →</button>
-          <button className="btn-secondary">Login</button>
+          <Link to="/register" className="btn-primary">Începe gratuit →</Link>
+          <Link to="/login" className="btn-secondary">Login</Link>
         </div>
       </main>
 
@@ -97,9 +97,9 @@ function LandingScreen() {
                 Alătură-te miilor de studenți din <strong>ROMÂNIA</strong>
                 </p>
 
-                <button className="final-cta-button">
+                <Link to="/register" className="final-cta-button">
                 ÎNCEPE GRATUIT
-                </button>
+                </Link>
             </div>
         </section>
       </section>

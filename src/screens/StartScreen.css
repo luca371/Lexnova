@@ -1,0 +1,114 @@
+/* =========================
+   START SCREEN
+========================= */
+
+.start-container {
+  min-height: 100vh;
+  background-color: #ffffff;
+  font-family: "Lexend Zetta", sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.start-loading {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Lexend Zetta", sans-serif;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+/* Card */
+
+.start-card {
+  width: 100%;
+  max-width: 620px;
+  background: linear-gradient(135deg, #f6f8fa, #eef2f6);
+  border-radius: 26px;
+  padding: 56px 48px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.08);
+  text-align: left;
+}
+
+/* Brand */
+
+.start-brand {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 4px;
+  font-weight: 600;
+  margin-bottom: 32px;
+  color: #000;
+}
+
+/* Title */
+
+.start-title {
+  font-size: 18px;
+  letter-spacing: 2px;
+  line-height: 1.4;
+  margin-bottom: 28px;
+}
+
+.start-title span {
+  color: #2b6f8a;
+}
+
+/* User info */
+
+.start-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  color: #333;
+}
+
+/* Divider */
+
+.start-divider {
+  height: 1px;
+  background-color: #e4e4e4;
+  margin: 32px 0;
+}
+
+/* Actions */
+
+.start-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.start-logout {
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: #555;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.start-logout:hover {
+  color: #c0392b;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 600px) {
+  .start-card {
+    padding: 44px 28px;
+  }
+
+  .start-title {
+    font-size: 16px;
+  }
+}
