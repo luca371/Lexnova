@@ -17,6 +17,7 @@
   align-items: center;
   padding: 28px 64px;
   border-bottom: 1px solid #ececec;
+  position: relative;
 }
 
 .start-logo {
@@ -25,22 +26,79 @@
   font-weight: 600;
 }
 
+/* =========================
+   DESKTOP NAV
+========================= */
+
 .start-nav {
   display: flex;
-  gap: 28px;
+  gap: 10px;
 }
 
 .start-nav button {
+  position: relative;
   background: none;
   border: none;
+  padding: 8px 14px;
+  border-radius: 10px;
   color: #444;
   font-size: 11px;
   letter-spacing: 1px;
+  font-family: inherit;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .start-nav button:hover {
+  background-color: #f1f1f1;
   color: #000;
+}
+
+/* Underline animation */
+.start-nav button::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 4px;
+  width: 0;
+  height: 1px;
+  background-color: #2b6f8a;
+  transition: all 0.25s ease;
+}
+
+.start-nav button:hover::after {
+  width: 60%;
+  left: 20%;
+}
+
+/* =========================
+   WAFFLE MENU BUTTON
+========================= */
+
+.waffle-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  width: 36px;   /* ⬆️ bigger tap area */
+  height: 36px;
+
+  display: none; /* hidden by default */
+
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 6px;      /* ⬆️ more breathing room */
+
+  padding: 4px; /* ⬆️ inner spacing */
+}
+
+
+.waffle-button span {
+  width: 6px;
+  height: 6px;
+
+  background-color: #2b6f8a;
+  border-radius: 50%; /* ⬅️ circles look more premium */
 }
 
 /* =========================
@@ -161,14 +219,56 @@
    RESPONSIVE
 ========================= */
 
-@media (max-width: 768px) {
+/* Tablet */
+@media (max-width: 1024px) {
   .start-navbar {
-    padding: 20px;
+    padding: 20px 32px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .start-navbar {
+    padding: 18px 20px;
   }
 
-  .start-title {
-    font-size: 26px;
-    letter-spacing: 2px;
+  /* Show waffle ONLY on mobile */
+  .waffle-button {
+    display: grid;
+  }
+
+  /* Hide desktop nav layout */
+  .start-nav {
+    position: absolute;
+    top: 72px;
+    right: 20px;
+
+    background-color: #ffffff;
+    border: 1px solid #e6e6e6;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+
+    padding: 12px;
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+
+    z-index: 100;
+  }
+
+  .start-nav.open {
+    display: flex;
+  }
+
+  .start-nav button {
+    width: 100%;
+    padding: 12px 16px;
+    background-color: #f5f5f5;
+    text-align: left;
+  }
+
+  .start-nav button::after {
+    display: none;
   }
 
   .start-actions {
@@ -182,45 +282,78 @@
     width: 100%;
     max-width: 280px;
   }
+
+  .start-title {
+    font-size: 26px;
+    letter-spacing: 2px;
+  }
 }
 
-.start-nav {
-  display: flex;
-  gap: 10px;
+/* Waffle press animation */
+.waffle-button {
+  transition: transform 0.15s ease;
 }
 
-.start-nav button {
-  position: relative;
-
-  background: none;
-  border: none;
-
-  padding: 8px 14px;
-  border-radius: 10px;
-
-  color: #444;
-  font-size: 11px;
-  letter-spacing: 1px;
-  font-family: inherit;
-
-  cursor: pointer;
-  transition: all 0.2s ease;
+.waffle-button:active {
+  transform: scale(0.92);
 }
 
-.start-nav button::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: 4px;
-
-  width: 0;
-  height: 1px;
-
-  background-color: #2b6f8a;
-  transition: all 0.25s ease;
+/* Waffle press animation */
+.waffle-button {
+  transition: transform 0.15s ease;
 }
 
-.start-nav button:hover::after {
-  width: 60%;
-  left: 20%;
+.waffle-button:active {
+  transform: scale(0.92);
+}
+
+@media (max-width: 640px) {
+  .start-nav button {
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: all 0.2s ease;
+  }
+
+  .start-nav.open button {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .start-nav.open button:nth-child(1) { transition-delay: 0.05s; }
+  .start-nav.open button:nth-child(2) { transition-delay: 0.1s; }
+  .start-nav.open button:nth-child(3) { transition-delay: 0.15s; }
+  .start-nav.open button:nth-child(4) { transition-delay: 0.2s; }
+}
+
+@media (max-width: 640px) {
+  .start-nav {
+    position: absolute;
+    top: 72px;
+    right: 20px;
+
+    background-color: #ffffff;
+    border: 1px solid #e6e6e6;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+
+    padding: 12px;
+    flex-direction: column;
+    gap: 6px;
+
+    opacity: 0;
+    transform: translateY(-8px) scale(0.96);
+    pointer-events: none;
+
+    transition:
+      opacity 0.25s ease,
+      transform 0.25s ease;
+
+    z-index: 100;
+  }
+
+  .start-nav.open {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
 }

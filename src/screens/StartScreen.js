@@ -7,8 +7,10 @@ import { auth, db } from "../firebase";
 
 function StartScreen() {
   const navigate = useNavigate();
+
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -38,22 +40,71 @@ function StartScreen() {
 
   return (
     <div className="start-hero">
-      {/* NAVBAR */}
+      {/* ================= NAVBAR ================= */}
       <header className="start-navbar">
         <span className="start-logo">LEXNOVA°</span>
 
-        <nav className="start-nav">
-          <button onClick={() => navigate("/start")}>Home</button>
-          <button>Lumi</button>
-          <button>Grile</button>
-          <button>Battle</button>
+        {/* Waffle menu button (mobile only) */}
+        <button
+          className="waffle-button"
+          onClick={() => setMenuOpen((prev) => !prev)}
+          aria-label="Open menu"
+        >
+          <span />
+          <span />
+          <span />
+          <span />
+          <span />
+          <span />
+          <span />
+          <span />
+          <span />
+        </button>
+
+        {/* Navigation */}
+        <nav className={`start-nav ${menuOpen ? "open" : ""}`}>
+          <button
+            onClick={() => {
+              navigate("/start");
+              setMenuOpen(false);
+            }}
+          >
+            Home
+          </button>
+
+          <button
+            onClick={() => {
+              navigate("/lumi");
+              setMenuOpen(false);
+            }}
+          >
+            Lumi
+          </button>
+
+          <button
+            onClick={() => {
+              navigate("/tests");
+              setMenuOpen(false);
+            }}
+          >
+            Grile
+          </button>
+
+          <button
+            onClick={() => {
+              navigate("/battle");
+              setMenuOpen(false);
+            }}
+          >
+            Battle
+          </button>
         </nav>
       </header>
 
-      {/* HERO */}
+      {/* ================= HERO ================= */}
       <main className="start-content">
         <span className="start-badge">
-          Platforma pentru studentii de la drept
+          Platforma pentru studenții de la drept
         </span>
 
         <h1 className="start-title">
@@ -80,7 +131,7 @@ function StartScreen() {
             className="start-secondary"
             onClick={() => navigate("/tests")}
           >
-            Incepe cu niste grile →
+            Începe cu niște grile →
           </button>
         </div>
 
