@@ -12,23 +12,19 @@ function StartScreen() {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      // ❌ Not logged in
       if (!user) {
         navigate("/login");
         return;
       }
 
-      // 🔍 Check Firestore onboarding
       const userRef = doc(db, "users", user.uid);
       const userSnap = await getDoc(userRef);
 
-      // ❌ Logged in but no form completed
       if (!userSnap.exists()) {
         navigate("/form");
         return;
       }
 
-      // ✅ All good
       setUserData(userSnap.data());
       setLoading(false);
     });
@@ -37,52 +33,67 @@ function StartScreen() {
   }, [navigate]);
 
   if (loading) {
-    return (
-      <div className="start-loading">
-        Se încarcă...
-      </div>
-    );
+    return <div className="start-loading">Se încarcă...</div>;
   }
 
   return (
-    <div className="start-container">
-      <div className="start-card">
-        <span className="start-brand">LEXNOVA°</span>
+    <div className="start-hero">
+      {/* NAVBAR */}
+      <header className="start-navbar">
+        <span className="start-logo">LEXNOVA°</span>
+
+        <nav className="start-nav">
+          <button onClick={() => navigate("/start")}>Home</button>
+          <button>Lumi</button>
+          <button>Tests</button>
+          <button>Battle</button>
+        </nav>
+      </header>
+
+      {/* HERO */}
+      <main className="start-content">
+        <span className="start-badge">
+          Platforma pentru studentii de la drept
+        </span>
 
         <h1 className="start-title">
-          Bine ai venit, <span>{userData.prenume}</span> 👋
+          Bine ai venit,
+          <br />
+          <span>{userData.prenume}</span>
         </h1>
 
-        <div className="start-info">
-          <p>
-            <strong>Profesie:</strong> {userData.profesie}
-          </p>
-
-          {userData.profesie === "Student" && (
-            <p>
-              <strong>An de studiu:</strong> {userData.anulStudiu}
-            </p>
-          )}
-
-          <p>
-            <strong>Oraș:</strong> {userData.oras}
-          </p>
-        </div>
-
-        <div className="start-divider" />
+        <p className="start-subtitle">
+          Partenerul tău inteligent pentru studiile juridice.
+          Învață mai eficient, testează-ți cunoștințele
+          și concurează cu alți studenți — totul cu ajutorul AI.
+        </p>
 
         <div className="start-actions">
           <button
-            className="start-logout"
-            onClick={() => {
-              signOut(auth);
-              navigate("/");
-            }}
+            className="start-primary"
+            onClick={() => navigate("/lumi")}
           >
-            Logout
+            Ask Lumi
+          </button>
+
+          <button
+            className="start-secondary"
+            onClick={() => navigate("/tests")}
+          >
+            Start Practicing →
           </button>
         </div>
-      </div>
+
+        <button
+          className="start-logout"
+          onClick={() => {
+            signOut(auth);
+            navigate("/");
+          }}
+        >
+          Logout
+        </button>
+      </main>
     </div>
   );
 }

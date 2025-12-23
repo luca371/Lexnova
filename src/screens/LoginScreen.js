@@ -5,6 +5,7 @@ import {
   signInWithPopup
 } from "firebase/auth";
 import { auth, googleProvider } from "../firebase";
+import googleImage from "../assests/googleimage.png";
 
 function LoginScreen() {
   const navigate = useNavigate();
@@ -50,15 +51,6 @@ function LoginScreen() {
         <span className="auth-logo">LEXNOVA°</span>
         <h1 className="auth-title">Autentificare</h1>
 
-        {/* GOOGLE BUTTON */}
-        <button
-          type="button"
-          className="auth-google"
-          onClick={handleGoogleLogin}
-        >
-          Continuă cu Google
-        </button>
-
         <form className="auth-form" onSubmit={handleLogin}>
           <input
             name="email"
@@ -81,6 +73,19 @@ function LoginScreen() {
         <p className="auth-footer">
           Nu ai cont? <Link to="/register">Creează unul</Link>
         </p>
+
+        <button
+          type="button"
+          className="google-button"
+          onClick={handleGoogleLogin}
+        >
+          <img
+            src={googleImage}
+            alt="Google logo"
+            className="google-icon"
+          />
+          <span>Continuă cu Google</span>
+        </button>
       </div>
     </div>
   );

@@ -6,6 +6,7 @@ import {
 } from "firebase/auth";
 import { auth, googleProvider } from "../firebase";
 import { useState } from "react";
+import googleImage from "../assests/googleimage.png";
 
 function SignScreen() {
   const navigate = useNavigate();
@@ -60,15 +61,6 @@ function SignScreen() {
         <span className="auth-logo">LEXNOVA°</span>
         <h1 className="auth-title">Creează cont</h1>
 
-        {/* GOOGLE BUTTON */}
-        <button
-          type="button"
-          className="auth-google"
-          onClick={handleGoogleRegister}
-        >
-          Creează cont cu Google
-        </button>
-
         <form className="auth-form" onSubmit={handleRegister}>
           <input
             name="email"
@@ -106,6 +98,19 @@ function SignScreen() {
         <p className="auth-footer">
           Ai deja cont? <Link to="/login">Autentifică-te</Link>
         </p>
+
+        <button
+          type="button"
+          className="google-button"
+          onClick={handleGoogleRegister}
+        >
+          <img
+            src={googleImage}
+            alt="Google logo"
+            className="google-icon"
+          />
+          <span>Continuă cu Google</span>
+        </button>
       </div>
     </div>
   );

@@ -1,56 +1,82 @@
+.start-hero {
+  min-height: 100vh;
+  background: radial-gradient(
+    circle at top,
+    #1c2730,
+    #0a0a0a 70%
+  );
+  color: #ffffff;
+  font-family: "Lexend Zetta", sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
 /* =========================
-   START SCREEN
+   NAVBAR
 ========================= */
 
-.start-container {
-  min-height: 100vh;
-  background-color: #ffffff;
-  font-family: "Lexend Zetta", sans-serif;
+.start-navbar {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  padding: 24px;
+  padding: 28px 64px;
 }
 
-.start-loading {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: "Lexend Zetta", sans-serif;
-  font-size: 12px;
-  letter-spacing: 1px;
-}
-
-/* Card */
-
-.start-card {
-  width: 100%;
-  max-width: 620px;
-  background: linear-gradient(135deg, #f6f8fa, #eef2f6);
-  border-radius: 26px;
-  padding: 56px 48px;
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.08);
-  text-align: left;
-}
-
-/* Brand */
-
-.start-brand {
-  display: block;
-  font-size: 11px;
-  letter-spacing: 4px;
+.start-logo {
+  font-size: 13px;
+  letter-spacing: 3px;
   font-weight: 600;
-  margin-bottom: 32px;
-  color: #000;
+}
+
+.start-nav {
+  display: flex;
+  gap: 28px;
+}
+
+.start-nav button {
+  background: none;
+  border: none;
+  color: #cfd6dc;
+  font-size: 11px;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+
+.start-nav button:hover {
+  color: #ffffff;
+}
+
+/* =========================
+   HERO CONTENT
+========================= */
+
+.start-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 24px;
+}
+
+/* Badge */
+.start-badge {
+  background-color: rgba(43, 111, 138, 0.15);
+  color: #9fd0e4;
+  padding: 10px 22px;
+  border-radius: 999px;
+  font-size: 10px;
+  letter-spacing: 1px;
+  margin-bottom: 36px;
 }
 
 /* Title */
-
 .start-title {
-  font-size: 18px;
-  letter-spacing: 2px;
-  line-height: 1.4;
+  font-size: 36px;
+  letter-spacing: 3px;
+  font-weight: 600;
+  line-height: 1.3;
   margin-bottom: 28px;
 }
 
@@ -58,57 +84,105 @@
   color: #2b6f8a;
 }
 
-/* User info */
-
-.start-info {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+/* Subtitle */
+.start-subtitle {
+  max-width: 620px;
   font-size: 11px;
-  letter-spacing: 0.5px;
-  color: #333;
+  line-height: 1.8;
+  letter-spacing: 1px;
+  color: #cfd6dc;
+  margin-bottom: 48px;
 }
 
-/* Divider */
-
-.start-divider {
-  height: 1px;
-  background-color: #e4e4e4;
-  margin: 32px 0;
-}
-
-/* Actions */
+/* =========================
+   ACTIONS
+========================= */
 
 .start-actions {
   display: flex;
-  justify-content: flex-end;
+  gap: 18px;
+  margin-bottom: 40px;
 }
 
+.start-primary,
+.start-secondary {
+  padding: 14px 30px;
+  border-radius: 14px;
+  font-size: 11px;
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.start-primary {
+  background-color: #2b6f8a;
+  color: #ffffff;
+}
+
+.start-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 40px rgba(43, 111, 138, 0.5);
+}
+
+.start-secondary {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+
+.start-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.14);
+}
+
+/* Logout */
 .start-logout {
   background: none;
   border: none;
-  font-family: inherit;
-  font-size: 11px;
+  color: #777;
+  font-size: 10px;
   letter-spacing: 1px;
-  color: #555;
   cursor: pointer;
-  transition: color 0.2s ease;
 }
 
 .start-logout:hover {
-  color: #c0392b;
+  color: #fff;
+}
+
+/* =========================
+   LOADING
+========================= */
+
+.start-loading {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Lexend Zetta", sans-serif;
 }
 
 /* =========================
    RESPONSIVE
 ========================= */
 
-@media (max-width: 600px) {
-  .start-card {
-    padding: 44px 28px;
+@media (max-width: 768px) {
+  .start-navbar {
+    padding: 20px;
   }
 
   .start-title {
-    font-size: 16px;
+    font-size: 26px;
+    letter-spacing: 2px;
+  }
+
+  .start-actions {
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+  }
+
+  .start-primary,
+  .start-secondary {
+    width: 100%;
+    max-width: 280px;
   }
 }

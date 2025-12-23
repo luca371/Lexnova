@@ -94,3 +94,39 @@
   background-color: #f6f8fa;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
+
+.google-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+
+  width: 100%;
+  padding: 12px;
+
+  background-color: #ffffff;
+  color: #333;
+
+  border: 1px solid #ddd;
+  border-radius: 8px;
+
+  font-size: 15px;
+  font-weight: 500;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.google-button:hover {
+  background-color: #f7f7f7;
+  border-color: #ccc;
+}
+
+.google-button:active {
+  transform: scale(0.98);
+}
+
+.google-icon {
+  width: 18px;
+  height: 18px;
+}

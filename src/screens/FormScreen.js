@@ -2,43 +2,62 @@ import "./FormScreen.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth, db } from "../firebase";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 
 function FormScreen() {
   const navigate = useNavigate();
-  const [profession, setProfession] = useState("");
+
+  const [formData, setFormData] = useState({
+    nume: "",
+    prenume: "",
+    profesie: "",
+    anulStudiu: "",
+    varsta: "",
+    oras: "",
+    sursa: "",
+  });
+
+  const [loading, setLoading] = useState(false);
+
+  function handleChange(field, value) {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
 
     const user = auth.currentUser;
-
     if (!user) {
       navigate("/login");
       return;
     }
 
-    const formData = {
-      nume: e.target[0].value,
-      prenume: e.target[1].value,
-      profesie: profession,
+    setLoading(true);
+
+    const payload = {
+      nume: formData.nume,
+      prenume: formData.prenume,
+      profesie: formData.profesie,
       anulStudiu:
-        profession === "Student"
-          ? e.target[3].value
+        formData.profesie === "Student"
+          ? formData.anulStudiu
           : null,
-      varsta: e.target[profession === "Student" ? 4 : 3].value,
-      oras: e.target[profession === "Student" ? 5 : 4].value,
-      sursa:
-        e.target[profession === "Student" ? 6 : 5]?.value || null,
+      varsta: Number(formData.varsta),
+      oras: formData.oras,
+      sursa: formData.sursa || null,
       completed: true,
-      createdAt: new Date(),
+      createdAt: serverTimestamp(),
     };
 
     try {
-      await setDoc(doc(db, "users", user.uid), formData);
+      await setDoc(doc(db, "users", user.uid), payload);
       navigate("/start");
     } catch (err) {
       alert("Eroare la salvare. Încearcă din nou.");
+      setLoading(false);
     }
   }
 
@@ -50,14 +69,32 @@ function FormScreen() {
         </h1>
 
         <form className="form-grid" onSubmit={handleSubmit}>
-          <input required placeholder="Nume" className="form-input" />
-          <input required placeholder="Prenume" className="form-input" />
+          {/* NUME */}
+          <input
+            required
+            placeholder="Nume"
+            className="form-input"
+            value={formData.nume}
+            onChange={(e) => handleChange("nume", e.target.value)}
+          />
 
+          {/* PRENUME */}
+          <input
+            required
+            placeholder="Prenume"
+            className="form-input"
+            value={formData.prenume}
+            onChange={(e) => handleChange("prenume", e.target.value)}
+          />
+
+          {/* PROFESIE */}
           <select
             required
             className="form-input"
-            value={profession}
-            onChange={(e) => setProfession(e.target.value)}
+            value={formData.profesie}
+            onChange={(e) =>
+              handleChange("profesie", e.target.value)
+            }
           >
             <option value="">Profesie</option>
             <option value="Student">Student</option>
@@ -68,8 +105,16 @@ function FormScreen() {
             <option value="Notar">Notar</option>
           </select>
 
-          {profession === "Student" && (
-            <select required className="form-input">
+          {/* AN STUDIU */}
+          {formData.profesie === "Student" && (
+            <select
+              required
+              className="form-input"
+              value={formData.anulStudiu}
+              onChange={(e) =>
+                handleChange("anulStudiu", e.target.value)
+              }
+            >
               <option value="">Anul de studiu</option>
               <option value="1">Anul 1</option>
               <option value="2">Anul 2</option>
@@ -78,18 +123,56 @@ function FormScreen() {
             </select>
           )}
 
-          <input required type="number" min="16" placeholder="Vârstă" className="form-input" />
-          <input required placeholder="Oraș" className="form-input" />
+          {/* VARSTA */}
+          <input
+            required
+            type="number"
+            min="16"
+            placeholder="Vârstă"
+            className="form-input"
+            value={formData.varsta}
+            onChange={(e) =>
+              handleChange("varsta", e.target.value)
+            }
+          />
 
-          <select className="form-input">
-            <option value="">De unde ai auzit de noi (opțional)</option>
+          {/* ORAS */}
+          <input
+            required
+            placeholder="Oraș"
+            className="form-input"
+            value={formData.oras}
+            onChange={(e) =>
+              handleChange("oras", e.target.value)
+            }
+          />
+
+          {/* SURSA */}
+          <select
+            className="form-input"
+            value={formData.sursa}
+            onChange={(e) =>
+              handleChange("sursa", e.target.value)
+            }
+          >
+            <option value="">
+              De unde ai auzit de noi (opțional)
+            </option>
             <option value="LinkedIn">LinkedIn</option>
             <option value="Facebook">Facebook</option>
             <option value="Instagram">Instagram</option>
-            <option value="Grup facultate">Grup la facultate</option>
+            <option value="Grup facultate">
+              Grup la facultate
+            </option>
           </select>
 
-          <button className="form-button">Continuă</button>
+          {/* SUBMIT */}
+          <button
+            className="form-button"
+            disabled={loading}
+          >
+            {loading ? "Se salvează..." : "Continuă"}
+          </button>
         </form>
       </div>
     </div>
