@@ -45,7 +45,7 @@ function StartScreen() {
         <nav className="start-nav">
           <button onClick={() => navigate("/start")}>Home</button>
           <button>Lumi</button>
-          <button>Tests</button>
+          <button>Grile</button>
           <button>Battle</button>
         </nav>
       </header>
@@ -80,7 +80,7 @@ function StartScreen() {
             className="start-secondary"
             onClick={() => navigate("/tests")}
           >
-            Start Practicing →
+            Incepe cu niste grile →
           </button>
         </div>
 
