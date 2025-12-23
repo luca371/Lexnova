@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/Lexnova/static/css/main.77596889.css",
-    "main.js": "/Lexnova/static/js/main.41053a8b.js",
+    "main.css": "/Lexnova/static/css/main.4b662743.css",
+    "main.js": "/Lexnova/static/js/main.0f8c9fe3.js",
     "index.html": "/Lexnova/index.html",
-    "main.77596889.css.map": "/Lexnova/static/css/main.77596889.css.map",
-    "main.41053a8b.js.map": "/Lexnova/static/js/main.41053a8b.js.map"
+    "main.4b662743.css.map": "/Lexnova/static/css/main.4b662743.css.map",
+    "main.0f8c9fe3.js.map": "/Lexnova/static/js/main.0f8c9fe3.js.map"
   },
   "entrypoints": [
-    "static/css/main.77596889.css",
-    "static/js/main.41053a8b.js"
+    "static/css/main.4b662743.css",
+    "static/js/main.0f8c9fe3.js"
   ]
 }
