@@ -9,27 +9,23 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 /**
- * Dacă vrei TOT pe Render (același domeniu), CORS nu mai e necesar.
- * Poți fie să îl scoți complet, fie să lași doar localhost pentru dev.
+ * Dacă vrei TOT pe Render (același domeniu), CORS nu e necesar pentru production.
+ * Îl lăsăm doar pentru dev local.
  */
-const allowedOrigins = [
-  "http://localhost:3000",
-  "http://localhost:5001",
-  // dacă frontend-ul e tot pe Render, nu ai nevoie de github.io aici
-];
+const allowedOrigins = ["http://localhost:3000", "http://localhost:5001"];
 
 app.use(
   cors({
     origin: function (origin, callback) {
-      // allow requests with no origin (like curl/postman)
+      // allow requests with no origin (curl/postman)
       if (!origin) return callback(null, true);
 
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
+      // allow dev origins
+      if (allowedOrigins.includes(origin)) return callback(null, true);
 
-      // dacă vrei să fie mai permisiv în production:
-      // return callback(null, true);
+      // IMPORTANT: same-origin requests on Render won't send an Origin that needs CORS,
+      // but some browsers/tools might. If you want to allow your Render domain too,
+      // add it here, e.g. "https://lexnova.onrender.com"
 
       return callback(new Error(`CORS blocked for origin: ${origin}`));
     },
@@ -43,7 +39,7 @@ app.use(express.json({ limit: "1mb" }));
 const ENDPOINT = "https://models.github.ai/inference/chat/completions";
 const MODEL = "openai/gpt-4.1";
 
-// health check
+// Health check
 app.get("/api/health", (req, res) => {
   res.json({ ok: true });
 });
@@ -53,7 +49,7 @@ app.post("/api/ask-ai", async (req, res) => {
   try {
     const token = process.env.GITHUB_TOKEN;
     if (!token) {
-      return res.status(500).json({ error: "Missing GITHUB_TOKEN in env" });
+      return res.status(500).json({ error: "Missing GITHUB_TOKEN in Render env vars" });
     }
 
     const { messages } = req.body;
@@ -87,22 +83,35 @@ app.post("/api/ask-ai", async (req, res) => {
     }
 
     const answer = data?.choices?.[0]?.message?.content ?? "";
-    res.json({ answer });
+    return res.json({ answer });
   } catch (err) {
     console.error("Server error:", err);
-    res.status(500).json({ error: "Internal server error", details: err.message });
+    return res.status(500).json({ error: "Internal server error", details: err.message });
   }
 });
 
 /**
- * ✅ Servește frontend-ul React (build) pe Render
- * IMPORTANT: Render trebuie să ruleze `npm run build` ca să existe folderul /build.
+ * ✅ Serve React build on Render
  */
 app.use(express.static(path.join(__dirname, "build")));
 
-// Orice altă rută (ex: /start, /lumi) returnează React
-app.get("*", (req, res) => {
+/**
+ * ✅ IMPORTANT: don't let the React fallback hijack /api routes.
+ * Anything that is NOT /api -> React index.html
+ */
+app.get("*", (req, res, next) => {
+  if (req.path.startsWith("/api")) return next();
   res.sendFile(path.join(__dirname, "build", "index.html"));
+});
+
+/**
+ * ✅ Ensure /api errors always return JSON (so frontend won't crash on res.json()).
+ */
+app.use((err, req, res, next) => {
+  if (req.path && req.path.startsWith("/api")) {
+    return res.status(500).json({ error: err.message || "Server error" });
+  }
+  next(err);
 });
 
 app.listen(PORT, "0.0.0.0", () => {
