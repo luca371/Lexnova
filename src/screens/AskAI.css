@@ -1,0 +1,385 @@
+/* ================================
+   AskAI – Nova-like upgraded (locked screen)
+================================ */
+
+.ask-container {
+  height: 100vh;          /* lock to viewport */
+  overflow: hidden;       /* prevent page scroll */
+  background: #f5f5f5;
+  color: #0a0a0a;
+
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji",
+    "Segoe UI Emoji";
+}
+
+.ask-card {
+  width: 100%;
+  max-width: 920px;
+
+  height: 100%;           /* fill the viewport height */
+  max-height: 720px;      /* cap on desktop so it looks clean */
+
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  border-radius: 22px;
+
+  padding: 18px;
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.08);
+
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;       /* IMPORTANT: keeps only chat scrollable */
+}
+
+/* header */
+.ask-header {
+  text-align: center;
+  padding: 6px 6px 0;
+  flex: 0 0 auto;         /* header doesn't stretch */
+}
+
+.ask-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.ask-brand {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.ask-clear {
+  appearance: none;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: #ffffff;
+  color: rgba(0, 0, 0, 0.75);
+
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease, opacity 0.15s ease;
+}
+
+.ask-clear:hover {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.16);
+  transform: translateY(-1px);
+}
+
+.ask-clear:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.ask-title {
+  margin: 10px 0 6px;
+  font-size: clamp(22px, 2.6vw, 32px);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: rgba(0, 0, 0, 0.92);
+}
+
+.ask-subtitle {
+  margin: 0 0 10px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(0, 0, 0, 0.55);
+}
+
+/* chat (ONLY this scrolls) */
+.ask-chat {
+  flex: 1 1 auto;         /* takes remaining height */
+  overflow-y: auto;       /* scroll only here */
+
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  border-radius: 18px;
+
+  background: rgba(0, 0, 0, 0.015);
+  padding: 14px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  min-height: 0;          /* IMPORTANT for flex overflow to work */
+}
+
+.ask-empty {
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(0, 0, 0, 0.55);
+  background: #ffffff;
+  border: 1px dashed rgba(0, 0, 0, 0.12);
+  border-radius: 16px;
+  padding: 12px 14px;
+}
+
+.ask-empty-title {
+  font-weight: 900;
+  color: rgba(0, 0, 0, 0.82);
+  margin-bottom: 6px;
+}
+
+.ask-empty-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* rows + bubbles */
+.ask-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ask-row.user {
+  align-items: flex-end;
+}
+
+.ask-row.assistant {
+  align-items: flex-start;
+}
+
+.ask-bubble {
+  max-width: 82%;
+  padding: 12px 14px;
+  border-radius: 16px;
+  font-size: 14px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.ask-bubble.user {
+  background: #1f2bd6;
+  color: #ffffff;
+  border-top-right-radius: 10px;
+}
+
+.ask-bubble.assistant {
+  background: #ffffff;
+  color: rgba(0, 0, 0, 0.85);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-top-left-radius: 10px;
+}
+
+/* assistant mini actions */
+.ask-actions-row {
+  display: flex;
+  gap: 8px;
+}
+
+.ask-mini {
+  appearance: none;
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  background: rgba(255, 255, 255, 0.85);
+  color: rgba(0, 0, 0, 0.75);
+
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+
+.ask-mini:hover {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.16);
+  transform: translateY(-1px);
+}
+
+/* typing dots */
+.ask-typing {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 14px;
+}
+
+.ask-typing .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.35);
+  animation: blink 1.1s infinite ease-in-out;
+}
+
+.ask-typing .dot:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.ask-typing .dot:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* input row */
+.ask-form {
+  flex: 0 0 auto;         /* form doesn't stretch */
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;  /* bottom align button with textarea */
+  margin-top: 12px;
+}
+
+.ask-input-wrap {
+  flex: 1;
+  display: flex;
+}
+
+.ask-input {
+  width: 100%;
+  resize: none;
+  overflow: auto;
+
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  background: #ffffff;
+
+  font-size: 14px;
+  line-height: 1.45;
+  color: rgba(0, 0, 0, 0.9);
+
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.ask-input::placeholder {
+  color: rgba(0, 0, 0, 0.40);
+}
+
+.ask-input:focus {
+  outline: none;
+  border-color: rgba(31, 43, 214, 0.45);
+  box-shadow: 0 0 0 4px rgba(31, 43, 214, 0.10);
+}
+
+/* aligned send button */
+.ask-send {
+  height: 44px;           /* fixed height for perfect alignment */
+  min-width: 110px;
+
+  border: none;
+  border-radius: 12px;
+
+  background: #1f2bd6;
+  color: #ffffff;
+
+  font-size: 14px;
+  font-weight: 800;
+
+  cursor: pointer;
+  align-self: flex-end;   /* ensures bottom align */
+
+  transition: background 0.15s ease, transform 0.15s ease, opacity 0.15s ease;
+}
+
+.ask-send:hover {
+  background: #1822b0;
+  transform: translateY(-1px);
+}
+
+.ask-send:active {
+  transform: translateY(0px);
+}
+
+.ask-send:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* focus-visible */
+.ask-input:focus-visible,
+.ask-send:focus-visible,
+.ask-mini:focus-visible,
+.ask-clear:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(31, 43, 214, 0.14);
+}
+
+/* responsive */
+@media (max-width: 600px) {
+  .ask-container {
+    padding: 12px;
+  }
+
+  .ask-card {
+    max-height: none;      /* allow full height on small screens */
+    border-radius: 18px;
+    padding: 14px;
+  }
+
+  .ask-chat {
+    padding: 12px;
+  }
+
+  .ask-bubble {
+    max-width: 92%;
+  }
+
+  .ask-send {
+    min-width: 92px;
+  }
+}
+/* Back button */
+.ask-back {
+  appearance: none;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: #ffffff;
+  color: rgba(0, 0, 0, 0.8);
+
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 700;
+
+  cursor: pointer;
+  white-space: nowrap;
+
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+
+.ask-back:hover {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.18);
+  transform: translateY(-1px);
+}
+
+.ask-back:active {
+  transform: translateY(0);
+}
+
+/* Mobile polish */
+@media (max-width: 600px) {
+  .ask-back {
+    padding: 7px 12px;
+    font-size: 12px;
+  }
+}

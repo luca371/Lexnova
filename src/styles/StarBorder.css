@@ -1,0 +1,89 @@
+.star-border-container {
+  display: inline-block;
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+/* animated “stars” */
+.border-gradient-bottom,
+.border-gradient-top {
+  position: absolute;
+  width: 260%;
+  height: 60%;
+  opacity: 0.75;
+  border-radius: 50%;
+  z-index: 0;
+}
+
+.border-gradient-bottom {
+  bottom: -14px;
+  right: -220%;
+  animation: star-movement-bottom linear infinite alternate;
+}
+
+.border-gradient-top {
+  top: -14px;
+  left: -220%;
+  animation: star-movement-top linear infinite alternate;
+}
+
+/* the clickable content */
+.inner-content {
+  position: relative;
+  z-index: 1;
+
+  border-radius: 13px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+
+  padding: 10px 16px; /* slimmer */
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* make any Link/Button inside fill nicely */
+.inner-content > a,
+.inner-content > button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+@keyframes star-movement-bottom {
+  0% {
+    transform: translate(0%, 0%);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-100%, 0%);
+    opacity: 0;
+  }
+}
+
+@keyframes star-movement-top {
+  0% {
+    transform: translate(0%, 0%);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(100%, 0%);
+    opacity: 0;
+  }
+}
