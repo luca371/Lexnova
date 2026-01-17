@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 5000;
  * Dacă vrei TOT pe Render (același domeniu), CORS nu e necesar pentru production.
  * Îl lăsăm doar pentru dev local.
  */
-const allowedOrigins = ["http://localhost:3000", "http://localhost:5001"];
+const allowedOrigins = ["http://localhost:3000", "http://localhost:5001", "https://lexnova.onrender.com"];
 
 app.use(
   cors({
