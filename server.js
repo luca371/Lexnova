@@ -3,16 +3,20 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 /**
- * Allow both common CRA ports.
- * Your current origin is http://localhost:5001 (per the error),
- * so we include it here.
+ * Dacă vrei TOT pe Render (același domeniu), CORS nu mai e necesar.
+ * Poți fie să îl scoți complet, fie să lași doar localhost pentru dev.
  */
-const allowedOrigins = ["http://localhost:3000", "http://localhost:5001"];
+const allowedOrigins = [
+  "http://localhost:3000",
+  "http://localhost:5001",
+  // dacă frontend-ul e tot pe Render, nu ai nevoie de github.io aici
+];
 
 app.use(
   cors({
@@ -23,6 +27,9 @@ app.use(
       if (allowedOrigins.includes(origin)) {
         return callback(null, true);
       }
+
+      // dacă vrei să fie mai permisiv în production:
+      // return callback(null, true);
 
       return callback(new Error(`CORS blocked for origin: ${origin}`));
     },
@@ -46,14 +53,12 @@ app.post("/api/ask-ai", async (req, res) => {
   try {
     const token = process.env.GITHUB_TOKEN;
     if (!token) {
-      return res.status(500).json({ error: "Missing GITHUB_TOKEN in .env" });
+      return res.status(500).json({ error: "Missing GITHUB_TOKEN in env" });
     }
 
     const { messages } = req.body;
     if (!Array.isArray(messages) || messages.length === 0) {
-      return res
-        .status(400)
-        .json({ error: "messages must be a non-empty array" });
+      return res.status(400).json({ error: "messages must be a non-empty array" });
     }
 
     const r = await fetch(ENDPOINT, {
@@ -85,12 +90,21 @@ app.post("/api/ask-ai", async (req, res) => {
     res.json({ answer });
   } catch (err) {
     console.error("Server error:", err);
-    res
-      .status(500)
-      .json({ error: "Internal server error", details: err.message });
+    res.status(500).json({ error: "Internal server error", details: err.message });
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`✅ AI server running on http://localhost:${PORT}`);
+/**
+ * ✅ Servește frontend-ul React (build) pe Render
+ * IMPORTANT: Render trebuie să ruleze `npm run build` ca să existe folderul /build.
+ */
+app.use(express.static(path.join(__dirname, "build")));
+
+// Orice altă rută (ex: /start, /lumi) returnează React
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
+
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`✅ Server running on port ${PORT}`);
 });
