@@ -564,3 +564,189 @@
     font-size: 12px;
   }
 }
+
+/* ===============================
+   Planet only header (marbled blue)
+================================ */
+
+.ask-planet-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 12px 0 10px;
+}
+
+/* Bigger planet (header hero) */
+.ask-planet-big {
+  width: 78px;
+  height: 78px;
+  border-radius: 999px;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+
+  border: 1px solid rgba(0, 0, 0, 0.10);
+
+  box-shadow:
+    0 18px 46px rgba(0, 0, 0, 0.16),
+    0 0 0 7px rgba(31, 43, 214, 0.08);
+
+  transform: translateZ(0);
+}
+
+/* “Marble” surface using multiple gradients + animation */
+.ask-planet-surface {
+  position: absolute;
+  inset: -18%;
+  border-radius: 999px;
+
+  /* Baby blue -> deep blue with milky swirls */
+  background:
+    radial-gradient(120% 120% at 25% 20%, rgba(255, 255, 255, 0.70), rgba(255, 255, 255, 0) 48%),
+    radial-gradient(95% 95% at 75% 75%, rgba(40, 120, 255, 0.55), rgba(40, 120, 255, 0) 60%),
+    conic-gradient(
+      from 210deg,
+      rgba(10, 32, 110, 0.95),
+      rgba(20, 60, 160, 0.95),
+      rgba(70, 170, 255, 0.88),
+      rgba(155, 225, 255, 0.82),
+      rgba(30, 90, 210, 0.92),
+      rgba(10, 32, 110, 0.95)
+    );
+
+  filter: saturate(1.12) contrast(1.08);
+
+  animation: bluePlanetDrift 7s ease-in-out infinite;
+}
+
+/* Swirl texture overlay (the “cloud marbling” vibe) */
+.ask-planet-surface::before {
+  content: "";
+  position: absolute;
+  inset: -35%;
+  border-radius: 999px;
+
+  background:
+    radial-gradient(circle at 20% 35%, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0) 45%),
+    radial-gradient(circle at 55% 25%, rgba(200, 245, 255, 0.28), rgba(200, 245, 255, 0) 52%),
+    radial-gradient(circle at 70% 60%, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0) 55%),
+    radial-gradient(circle at 35% 70%, rgba(180, 235, 255, 0.20), rgba(180, 235, 255, 0) 52%);
+
+  mix-blend-mode: screen;
+  opacity: 0.9;
+
+  transform: rotate(0deg);
+  animation: blueSwirl 5.5s ease-in-out infinite;
+}
+
+/* Another faint swirl layer to mimic “painted” texture */
+.ask-planet-surface::after {
+  content: "";
+  position: absolute;
+  inset: -45%;
+  border-radius: 999px;
+
+  background:
+    conic-gradient(
+      from 0deg,
+      rgba(255, 255, 255, 0.00),
+      rgba(255, 255, 255, 0.14),
+      rgba(255, 255, 255, 0.00),
+      rgba(255, 255, 255, 0.10),
+      rgba(255, 255, 255, 0.00)
+    );
+
+  opacity: 0.55;
+  filter: blur(0.2px);
+  animation: blueSwirl2 8.2s linear infinite;
+}
+
+/* Highlight */
+.ask-planet-highlight {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background:
+    radial-gradient(60% 60% at 30% 22%, rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0) 55%),
+    radial-gradient(45% 45% at 72% 82%, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0) 60%);
+  mix-blend-mode: screen;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+/* Soft bottom shadow like the reference */
+.ask-planet-shadow {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: radial-gradient(90% 65% at 45% 90%, rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0) 62%);
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+/* mouth / speaking wave (only visible while speaking) */
+.ask-planet-mouth {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  width: 26px;
+  height: 9px;
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.55);
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.08) inset;
+  opacity: 0;
+}
+
+/* Speaking mode */
+.ask-planet-big.is-speaking {
+  box-shadow:
+    0 22px 60px rgba(0, 0, 0, 0.18),
+    0 0 0 8px rgba(31, 43, 214, 0.12),
+    0 0 0 16px rgba(31, 43, 214, 0.07);
+  animation: bluePlanetPulse 1.2s ease-in-out infinite;
+}
+
+.ask-planet-big.is-speaking .ask-planet-mouth {
+  opacity: 0.95;
+  animation: blueMouthTalk 0.55s ease-in-out infinite;
+}
+
+/* Animations */
+@keyframes bluePlanetDrift {
+  0% { transform: translate(-2%, -1%) scale(1.02) rotate(0deg); }
+  50% { transform: translate(2%, 1%) scale(1.06) rotate(10deg); }
+  100% { transform: translate(-2%, -1%) scale(1.02) rotate(0deg); }
+}
+
+@keyframes blueSwirl {
+  0% { transform: rotate(0deg) translateY(0px); }
+  50% { transform: rotate(12deg) translateY(-2px); }
+  100% { transform: rotate(0deg) translateY(0px); }
+}
+
+@keyframes blueSwirl2 {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes bluePlanetPulse {
+  0%, 100% { transform: scale(1.0); }
+  50% { transform: scale(1.06); }
+}
+
+@keyframes blueMouthTalk {
+  0% { height: 8px; width: 20px; filter: blur(0px); }
+  50% { height: 13px; width: 30px; filter: blur(0.2px); }
+  100% { height: 8px; width: 20px; filter: blur(0px); }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .ask-planet-big {
+    width: 66px;
+    height: 66px;
+  }
+  .ask-planet-mouth {
+    bottom: 14px;
+  }
+}

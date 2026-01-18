@@ -151,25 +151,19 @@ function AskAI() {
           </div>
 
           {/* NEW: Planet agent header */}
-          <div className="ask-agent">
-            <div
-              className={`ask-planet ${isSpeaking ? "is-speaking" : ""}`}
-              aria-label="Lumi"
-              role="img"
-            >
-              <div className="ask-planet-core" />
-              <div className="ask-planet-shine" />
-              <div className="ask-planet-rings" />
-              <div className="ask-planet-rings ask-planet-rings--2" />
-              <div className="ask-planet-noise" />
-              <div className="ask-planet-mouth" />
-            </div>
-
-            <div className="ask-agent-text">
-              <div className="ask-agent-name">Lumi</div>
-              <div className="ask-agent-sub">Întreabă orice — răspunsuri rapide și clare.</div>
-            </div>
+          {/* NEW: planet only (no text) */}
+        <div className="ask-planet-wrap" aria-label="Lumi agent">
+          <div
+            className={`ask-planet-big ${isSpeaking ? "is-speaking" : ""}`}
+            aria-label="Lumi"
+            role="img"
+          >
+            <div className="ask-planet-surface" />
+            <div className="ask-planet-highlight" />
+            <div className="ask-planet-shadow" />
+            <div className="ask-planet-mouth" />
           </div>
+        </div>
         </div>
 
         <div className="ask-chat">
