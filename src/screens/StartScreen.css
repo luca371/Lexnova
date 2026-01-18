@@ -737,7 +737,7 @@
 .mini-chat-text {
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 4; /* keep it tidy in tile */
+  /*-webkit-line-clamp: 4; /* keep it tidy in tile */
   overflow: hidden;
 
   font-size: 12px;
@@ -748,7 +748,7 @@
 }
 
 .mini-chat-text--ai {
-  -webkit-line-clamp: 5;
+  /*-webkit-line-clamp: 5;*/
   font-weight: 700;
   color: rgba(0, 0, 0, 0.72);
 }
