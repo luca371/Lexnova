@@ -716,6 +716,32 @@
 @media (max-width: 600px) {
   .ask-planet-big {
     width: 66px;
+    aspect-ratio: 1 / 1;
     height: 66px;
   }
+}
+/* --- Bulletproof circle on mobile/tablet --- */
+.ask-planet-big {
+  display: block;
+  flex: 0 0 auto;
+
+  width: 78px;            /* keep your value */
+  aspect-ratio: 1 / 1;    /* ensures perfect square */
+  height: auto;           /* let aspect-ratio control height */
+
+  border-radius: 50%;
+  overflow: hidden;
+
+  /* extra safety for Safari */
+  clip-path: circle(50% at 50% 50%);
+  -webkit-clip-path: circle(50% at 50% 50%);
+}
+
+/* make sure all layers are circles too */
+.ask-planet-surface,
+.ask-planet-highlight,
+.ask-planet-shadow,
+.ask-planet-surface::before,
+.ask-planet-surface::after {
+  border-radius: 50%;
 }
