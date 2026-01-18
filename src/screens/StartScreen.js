@@ -15,10 +15,10 @@ function StartScreen() {
 
   // ===== Lumi preview (typing animation in tile) =====
   const previewQuestion =
-    "Un contract de vânzare-cumpărare este încheiat cu încălcarea unei condiții de validitate (ex: consimțământ viciat prin dol), dar între timp una dintre părți își execută obligațiile. Care este diferența juridică dintre constatarea nulității și pronunțarea rezoluțiunii în acest caz și ce efecte produce fiecare asupra prestațiilor deja executate?";
+    "Care este diferența dintre nulitatea și rezoluțiunea unui contract de vânzare-cumpărare încheiat cu consimțământ viciat prin dol și ce efecte au acestea asupra prestațiilor deja executate?";
 
   const previewAnswer =
-    "Nulitatea sancționează nerespectarea unei condiții de validitate la încheierea contractului (ex: consimțământ viciat prin dol). Ea are efect retroactiv (ex tunc), astfel încât contractul este considerat ca și cum nu ar fi existat niciodată. În consecință, prestațiile executate se restituie integral, potrivit principiului restitutio in integrum.\n\nRezoluțiunea, în schimb, sancționează neexecutarea culpabilă a obligațiilor într-un contract valabil încheiat. Ea produce efecte doar pentru viitor (ex nunc). Deși duce și ea la restituirea prestațiilor, aceasta se face deoarece contractul se desființează, nu pentru că ar fi fost nul.\n\nAplicat speței: dacă există dol la încheiere, sancțiunea corectă este nulitatea relativă, cu efect retroactiv și restituirea prestațiilor.";
+    "Nulitatea se aplică pentru viciu la încheiere (dol) și desființează contractul retroactiv; prestațiile se restituie integral. Rezoluțiunea se aplică pentru neexecutare și desființează contractul doar pentru viitor; prestațiile se restituie pentru că actul încetează.";
 
   const questionWords = useMemo(
     () => previewQuestion.split(/\s+/).filter(Boolean),
