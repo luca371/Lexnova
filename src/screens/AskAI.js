@@ -1,3 +1,4 @@
+// AskAI.jsx
 import "./AskAI.css";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +8,9 @@ function AskAI() {
   const [thread, setThread] = useState([]);
   const [loading, setLoading] = useState(false);
   const [copiedIndex, setCopiedIndex] = useState(null);
+
+  // NEW: short "speaking pulse" after assistant message arrives
+  const [speakingPulse, setSpeakingPulse] = useState(false);
 
   const bottomRef = useRef(null);
   const textareaRef = useRef(null);
@@ -34,6 +38,11 @@ function AskAI() {
     el.style.height = next + "px";
   }, [input]);
 
+  function triggerPulse(ms = 900) {
+    setSpeakingPulse(true);
+    window.setTimeout(() => setSpeakingPulse(false), ms);
+  }
+
   async function sendMessage(text) {
     const trimmed = text.trim();
     if (!trimmed || loading) return;
@@ -41,8 +50,7 @@ function AskAI() {
     // Build next thread based on current state
     const nextThread = [...thread, { role: "user", content: trimmed }];
 
-    /*"start": "node server.js",*/
-    // Optimistically update UI 
+    // Optimistically update UI
     setThread(nextThread);
     setInput("");
     setLoading(true);
@@ -67,15 +75,20 @@ function AskAI() {
       if (!res.ok) throw new Error(data?.error || "AI request failed");
 
       setThread((prev) => [...prev, { role: "assistant", content: data.answer }]);
+
+      // NEW: pulse when answer lands (agent-like)
+      triggerPulse(900);
     } catch (err) {
       console.error(err);
       setThread((prev) => [
         ...prev,
         { role: "assistant", content: "Eroare la AI. Verifică serverul și token-ul, apoi încearcă din nou." }
       ]);
+
+      // optional: small pulse on error too
+      triggerPulse(650);
     } finally {
       setLoading(false);
-      // keep focus ready
       textareaRef.current?.focus();
     }
   }
@@ -110,32 +123,53 @@ function AskAI() {
     textareaRef.current?.focus();
   }
 
+  const isSpeaking = loading || speakingPulse;
+
   return (
     <div className="ask-container">
       <div className="ask-card">
         <div className="ask-header">
           <div className="ask-header-top">
             <button
-                className="ask-back"
-                onClick={() => navigate("/start")}
-                aria-label="Înapoi"
+              className="ask-back"
+              onClick={() => navigate("/start")}
+              aria-label="Înapoi"
             >
-                ← Înapoi
+              ← Înapoi
             </button>
 
             <span className="ask-brand">LEXNOVA</span>
 
             <button
-                className="ask-clear"
-                type="button"
-                onClick={clearChat}
-                disabled={!canClear}
+              className="ask-clear"
+              type="button"
+              onClick={clearChat}
+              disabled={!canClear}
             >
-                Sterge
+              Sterge
             </button>
+          </div>
+
+          {/* NEW: Planet agent header */}
+          <div className="ask-agent">
+            <div
+              className={`ask-planet ${isSpeaking ? "is-speaking" : ""}`}
+              aria-label="Lumi"
+              role="img"
+            >
+              <div className="ask-planet-core" />
+              <div className="ask-planet-shine" />
+              <div className="ask-planet-rings" />
+              <div className="ask-planet-rings ask-planet-rings--2" />
+              <div className="ask-planet-noise" />
+              <div className="ask-planet-mouth" />
             </div>
-          <h1 className="ask-title">Lumi</h1>
-          <p className="ask-subtitle">Întreabă orice — răspunsuri rapide și clare.</p>
+
+            <div className="ask-agent-text">
+              <div className="ask-agent-name">Lumi</div>
+              <div className="ask-agent-sub">Întreabă orice — răspunsuri rapide și clare.</div>
+            </div>
+          </div>
         </div>
 
         <div className="ask-chat">
