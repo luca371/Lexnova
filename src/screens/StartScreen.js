@@ -14,21 +14,27 @@ function StartScreen() {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (!user) {
+      try {
+        if (!user) {
+          navigate("/login");
+          return;
+        }
+
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
+
+        if (!userSnap.exists()) {
+          navigate("/form");
+          return;
+        }
+
+        setUserData(userSnap.data());
+      } catch (err) {
+        console.error("StartScreen error:", err);
         navigate("/login");
-        return;
+      } finally {
+        setLoading(false);
       }
-
-      const userRef = doc(db, "users", user.uid);
-      const userSnap = await getDoc(userRef);
-
-      if (!userSnap.exists()) {
-        navigate("/form");
-        return;
-      }
-
-      setUserData(userSnap.data());
-      setLoading(false);
     });
 
     return () => unsubscribe();
@@ -44,7 +50,6 @@ function StartScreen() {
       <header className="start-navbar">
         <span className="start-logo">LEXNOVA°</span>
 
-        {/* Waffle menu button (mobile only) */}
         <button
           className="waffle-button"
           onClick={() => setMenuOpen((prev) => !prev)}
@@ -61,7 +66,6 @@ function StartScreen() {
           <span />
         </button>
 
-        {/* Navigation */}
         <nav className={`start-nav ${menuOpen ? "open" : ""}`}>
           <button
             onClick={() => {
@@ -103,38 +107,127 @@ function StartScreen() {
 
       {/* ================= HERO ================= */}
       <main className="start-content">
-        <span className="start-badge">
-          Platforma pentru studenții de la drept
-        </span>
+        <span className="start-badge">Platforma pentru studenții de la drept</span>
 
         <h1 className="start-title">
           Bine ai venit,
           <br />
-          <span>{userData.prenume}</span>
+          <span>{userData?.prenume ?? ""}</span>
         </h1>
 
         <p className="start-subtitle">
-          Partenerul tău inteligent pentru studiile juridice.
-          Învață mai eficient, testează-ți cunoștințele
-          și concurează cu alți studenți — totul cu ajutorul AI.
+          Partenerul tău inteligent pentru studiile juridice. Învață mai eficient, testează-ți cunoștințele și
+          concurează cu alți studenți — totul cu ajutorul AI.
         </p>
 
         <div className="start-actions">
-          <button
-            className="start-primary"
-            onClick={() => navigate("/lumi")}
-          >
+          <button className="start-primary" onClick={() => navigate("/lumi")}>
             Ask Lumi
           </button>
 
-          <button
-            className="start-secondary"
-            onClick={() => navigate("/tests")}
-          >
+          <button className="start-secondary" onClick={() => navigate("/tests")}>
             Începe cu niște grile →
           </button>
         </div>
 
+        {/* ================= FEATURE PREVIEWS ================= */}
+        <section className="start-sections" aria-label="Funcționalități">
+          {/* Lumi: text left, anim right */}
+          <div className="start-section">
+            <div className="start-section-text">
+              <div className="start-section-eyebrow">Lumi</div>
+              <h2 className="start-section-title">Răspunsuri rapide, structurate, pentru drept</h2>
+              <p className="start-section-desc">
+                Pune o întrebare și primești explicații clare, exemple și pași concreți. Perfect pentru recapitulare
+                înainte de seminar sau examen.
+              </p>
+
+              <div className="start-section-cta">
+                <button className="start-ghost" onClick={() => navigate("/lumi")}>
+                  Deschide Lumi →
+                </button>
+              </div>
+            </div>
+
+            <div className="start-section-media" aria-hidden="true">
+              <div className="mini-loop mini-loop--chat">
+                <div className="mini-loop-top">
+                  <span className="mini-dot" />
+                  <span className="mini-dot" />
+                  <span className="mini-dot" />
+                </div>
+
+                <div className="mini-loop-body">
+                  <div className="mini-bubble mini-bubble-user" />
+                  <div className="mini-bubble mini-bubble-ai" />
+                  <div className="mini-bubble mini-bubble-user" />
+                  <div className="mini-bubble mini-bubble-ai" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Grile: anim left, text right */}
+          <div className="start-section start-section--reverse">
+            <div className="start-section-text">
+              <div className="start-section-eyebrow">Grile</div>
+              <h2 className="start-section-title">Antrenament pe capitole, ritm și dificultate</h2>
+              <p className="start-section-desc">
+                Practică pe materii și urmărește progresul. Primești feedback rapid și revii fix unde ai nevoie.
+              </p>
+
+              <div className="start-section-cta">
+                <button className="start-ghost" onClick={() => navigate("/tests")}>
+                  Vezi Grile →
+                </button>
+              </div>
+            </div>
+
+            <div className="start-section-media" aria-hidden="true">
+              <div className="mini-loop mini-loop--grid">
+                <div className="mini-grid">
+                  {Array.from({ length: 12 }).map((_, i) => (
+                    <div key={i} className="mini-tile" />
+                  ))}
+                </div>
+                <div className="mini-scanline" />
+              </div>
+            </div>
+          </div>
+
+          {/* Battle: text left, anim right */}
+          <div className="start-section">
+            <div className="start-section-text">
+              <div className="start-section-eyebrow">Battle</div>
+              <h2 className="start-section-title">Competiție cap la cap, ca să te motivezi</h2>
+              <p className="start-section-desc">
+                Intră în dueluri rapide cu alți studenți. Îți testezi reacția, memoria și consistența — într-un format
+                fun.
+              </p>
+
+              <div className="start-section-cta">
+                <button className="start-ghost" onClick={() => navigate("/battle")}>
+                  Intră în Battle →
+                </button>
+              </div>
+            </div>
+
+            <div className="start-section-media" aria-hidden="true">
+              <div className="mini-loop mini-loop--race">
+                <div className="mini-race-track">
+                  <div className="mini-race-bar mini-race-bar--a" />
+                  <div className="mini-race-bar mini-race-bar--b" />
+                </div>
+                <div className="mini-race-labels">
+                  <span className="mini-pill">TU</span>
+                  <span className="mini-pill">RIVAL</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ================= LOGOUT ================= */}
         <button
           className="start-logout"
           onClick={() => {

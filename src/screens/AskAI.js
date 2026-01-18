@@ -41,7 +41,8 @@ function AskAI() {
     // Build next thread based on current state
     const nextThread = [...thread, { role: "user", content: trimmed }];
 
-    // Optimistically update UI
+    /*"start": "node server.js",*/
+    // Optimistically update UI 
     setThread(nextThread);
     setInput("");
     setLoading(true);
