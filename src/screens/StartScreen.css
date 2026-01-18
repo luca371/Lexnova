@@ -696,3 +696,76 @@
     min-height: 220px;
   }
 }
+/* ================= Lumi tile: real chat preview (typing + answer) ================= */
+
+.mini-chat {
+  gap: 10px;
+  padding-top: 6px;
+}
+
+.mini-chat-row {
+  display: flex;
+}
+
+.mini-chat-row--user {
+  justify-content: flex-end;
+}
+
+.mini-chat-row--ai {
+  justify-content: flex-start;
+}
+
+.mini-chat-bubble {
+  max-width: 88%;
+  padding: 10px 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+.mini-chat-bubble--user {
+  background: rgba(31, 43, 214, 0.10);
+  border-color: rgba(31, 43, 214, 0.14);
+}
+
+.mini-chat-bubble--ai {
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.mini-chat-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4; /* keep it tidy in tile */
+  overflow: hidden;
+
+  font-size: 12px;
+  line-height: 1.35;
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.78);
+  white-space: pre-wrap;
+}
+
+.mini-chat-text--ai {
+  -webkit-line-clamp: 5;
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.72);
+}
+
+/* blinking caret like texting */
+.mini-caret {
+  display: inline-block;
+  width: 6px;
+  height: 12px;
+  margin-left: 4px;
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0.45);
+  transform: translateY(2px);
+  animation: miniCaretBlink 0.9s infinite;
+}
+
+@keyframes miniCaretBlink {
+  0%, 45% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}

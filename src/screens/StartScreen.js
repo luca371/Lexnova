@@ -1,5 +1,6 @@
+// StartScreen.jsx
 import "./StartScreen.css";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
@@ -11,6 +12,77 @@ function StartScreen() {
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
+
+  // ===== Lumi preview (typing animation in tile) =====
+  const previewQuestion =
+    "Un contract de vânzare-cumpărare este încheiat cu încălcarea unei condiții de validitate (ex: consimțământ viciat prin dol), dar între timp una dintre părți își execută obligațiile. Care este diferența juridică dintre constatarea nulității și pronunțarea rezoluțiunii în acest caz și ce efecte produce fiecare asupra prestațiilor deja executate?";
+
+  const previewAnswer =
+    "Nulitatea sancționează nerespectarea unei condiții de validitate la încheierea contractului (ex: consimțământ viciat prin dol). Ea are efect retroactiv (ex tunc), astfel încât contractul este considerat ca și cum nu ar fi existat niciodată. În consecință, prestațiile executate se restituie integral, potrivit principiului restitutio in integrum.\n\nRezoluțiunea, în schimb, sancționează neexecutarea culpabilă a obligațiilor într-un contract valabil încheiat. Ea produce efecte doar pentru viitor (ex nunc). Deși duce și ea la restituirea prestațiilor, aceasta se face deoarece contractul se desființează, nu pentru că ar fi fost nul.\n\nAplicat speței: dacă există dol la încheiere, sancțiunea corectă este nulitatea relativă, cu efect retroactiv și restituirea prestațiilor.";
+
+  const questionWords = useMemo(
+    () => previewQuestion.split(/\s+/).filter(Boolean),
+    [previewQuestion]
+  );
+
+  const [typedQuestion, setTypedQuestion] = useState("");
+  const [showAnswer, setShowAnswer] = useState(false);
+
+  const typingTimersRef = useRef([]); // store timeouts so we can clear on unmount
+
+  useEffect(() => {
+    const clearAll = () => {
+      typingTimersRef.current.forEach((t) => window.clearTimeout(t));
+      typingTimersRef.current = [];
+    };
+
+    const schedule = (fn, ms) => {
+      const id = window.setTimeout(fn, ms);
+      typingTimersRef.current.push(id);
+      return id;
+    };
+
+    const runLoop = () => {
+      setTypedQuestion("");
+      setShowAnswer(false);
+
+      // word-by-word typing
+      const perWordMs = 140; // typing speed
+      const afterQuestionPause = 650;
+      const showAnswerDuration = 2600;
+      const restartPause = 650;
+
+      questionWords.forEach((_, idx) => {
+        schedule(() => {
+          setTypedQuestion(questionWords.slice(0, idx + 1).join(" "));
+        }, idx * perWordMs);
+      });
+
+      const questionDoneAt = questionWords.length * perWordMs;
+
+      // show answer in one go
+      schedule(
+        () => setShowAnswer(true),
+        questionDoneAt + afterQuestionPause
+      );
+
+      // hide + restart
+      schedule(
+        () => setShowAnswer(false),
+        questionDoneAt + afterQuestionPause + showAnswerDuration
+      );
+      schedule(
+        () => runLoop(),
+        questionDoneAt +
+          afterQuestionPause +
+          showAnswerDuration +
+          restartPause
+      );
+    };
+
+    runLoop();
+    return () => clearAll();
+  }, [questionWords]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -116,8 +188,8 @@ function StartScreen() {
         </h1>
 
         <p className="start-subtitle">
-          Partenerul tău inteligent pentru studiile juridice. Învață mai eficient, testează-ți cunoștințele și
-          concurează cu alți studenți — totul cu ajutorul AI.
+          Partenerul tău inteligent pentru studiile juridice. Învață mai eficient,
+          testează-ți cunoștințele și concurează cu alți studenți — totul cu ajutorul AI.
         </p>
 
         <div className="start-actions">
@@ -136,10 +208,12 @@ function StartScreen() {
           <div className="start-section">
             <div className="start-section-text">
               <div className="start-section-eyebrow">Lumi</div>
-              <h2 className="start-section-title">Răspunsuri rapide, structurate, pentru drept</h2>
+              <h2 className="start-section-title">
+                Răspunsuri rapide, structurate, pentru drept
+              </h2>
               <p className="start-section-desc">
-                Pune o întrebare și primești explicații clare, exemple și pași concreți. Perfect pentru recapitulare
-                înainte de seminar sau examen.
+                Pune o întrebare și primești explicații clare, exemple și pași concreți.
+                Perfect pentru recapitulare înainte de seminar sau examen.
               </p>
 
               <div className="start-section-cta">
@@ -157,11 +231,26 @@ function StartScreen() {
                   <span className="mini-dot" />
                 </div>
 
-                <div className="mini-loop-body">
-                  <div className="mini-bubble mini-bubble-user" />
-                  <div className="mini-bubble mini-bubble-ai" />
-                  <div className="mini-bubble mini-bubble-user" />
-                  <div className="mini-bubble mini-bubble-ai" />
+                {/* UPDATED: real chat preview with typing + answer */}
+                <div className="mini-loop-body mini-chat">
+                  <div className="mini-chat-row mini-chat-row--user">
+                    <div className="mini-chat-bubble mini-chat-bubble--user">
+                      <span className="mini-chat-text">
+                        {typedQuestion}
+                        <span className="mini-caret" aria-hidden="true" />
+                      </span>
+                    </div>
+                  </div>
+
+                  {showAnswer && (
+                    <div className="mini-chat-row mini-chat-row--ai">
+                      <div className="mini-chat-bubble mini-chat-bubble--ai">
+                        <span className="mini-chat-text mini-chat-text--ai">
+                          {previewAnswer}
+                        </span>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -171,9 +260,12 @@ function StartScreen() {
           <div className="start-section start-section--reverse">
             <div className="start-section-text">
               <div className="start-section-eyebrow">Grile</div>
-              <h2 className="start-section-title">Antrenament pe capitole, ritm și dificultate</h2>
+              <h2 className="start-section-title">
+                Antrenament pe capitole, ritm și dificultate
+              </h2>
               <p className="start-section-desc">
-                Practică pe materii și urmărește progresul. Primești feedback rapid și revii fix unde ai nevoie.
+                Practică pe materii și urmărește progresul. Primești feedback rapid și
+                revii fix unde ai nevoie.
               </p>
 
               <div className="start-section-cta">
@@ -199,10 +291,12 @@ function StartScreen() {
           <div className="start-section">
             <div className="start-section-text">
               <div className="start-section-eyebrow">Battle</div>
-              <h2 className="start-section-title">Competiție cap la cap, ca să te motivezi</h2>
+              <h2 className="start-section-title">
+                Competiție cap la cap, ca să te motivezi
+              </h2>
               <p className="start-section-desc">
-                Intră în dueluri rapide cu alți studenți. Îți testezi reacția, memoria și consistența — într-un format
-                fun.
+                Intră în dueluri rapide cu alți studenți. Îți testezi reacția, memoria
+                și consistența — într-un format fun.
               </p>
 
               <div className="start-section-cta">
